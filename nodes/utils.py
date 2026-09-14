@@ -1,13 +1,24 @@
 class DynamicInputDict(dict):
-    def __init__(self, base_dict, default_type=("SIGMAS",)):
+    def __init__(self, base_dict, default_type=("SIGMAS",), key_prefix=None):
         super().__init__(base_dict)
         self.default_type = default_type
+        self.key_prefix = key_prefix
 
     def __contains__(self, key):
-        return True
+        return super().__contains__(key) or (
+            isinstance(key, str)
+            and self.key_prefix is not None
+            and key.startswith(self.key_prefix)
+            and key[len(self.key_prefix) :].isdigit()
+        )
 
     def __getitem__(self, key):
-        return super().get(key, self.default_type)
+        if super().__contains__(key):
+            return super().__getitem__(key)
+        if key in self:
+            return self.default_type
+        raise KeyError(key)
+
 
 class DynamicReturnType(tuple):
     def __new__(cls, base_tuple, default_type="IMAGE", max_len=100):

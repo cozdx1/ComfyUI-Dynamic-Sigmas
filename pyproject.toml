@@ -1,0 +1,21 @@
+[project]
+name = "dynamic-sigmas"
+version = "1.1.0"
+description = "Tools for creating, editing, inspecting, combining, and reusing custom sigma schedules in ComfyUI."
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+dependencies = [
+    "matplotlib",
+]
+classifiers = [
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Repository = "https://github.com/cozdx1/ComfyUI-Dynamic-Sigmas"
+Documentation = "https://github.com/cozdx1/ComfyUI-Dynamic-Sigmas#readme"
+"Bug Tracker" = "https://github.com/cozdx1/ComfyUI-Dynamic-Sigmas/issues"
+
+[tool.comfy]
+PublisherId = "cozdx1"
+DisplayName = "cozdx1 Dynamic Sigmas"

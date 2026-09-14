@@ -1,7 +1,9 @@
 import { app } from "../../scripts/app.js";
 
+const NODE_MIN_WIDTH = 220;
+
 app.registerExtension({
-    name: "Comfy.GraphSigmas",
+    name: "cozdx1.GraphSigmas",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GraphSigmas") {
             const onNodeCreated = nodeType.prototype.onNodeCreated;
@@ -56,21 +58,22 @@ app.registerExtension({
                     } else {
                         action();
                         const minSize = node.computeSize();
-                        node.size[0] = Math.max(node.size[0], minSize[0]);
+                        node.size[0] = Math.max(node.size[0], minSize[0], NODE_MIN_WIDTH);
                         node.size[1] = minSize[1];
                     }
                 };
 
+                let setupAttempts = 0;
                 const setupWidgets = () => {
                     const countWidget = node.widgets ? node.widgets.find(w => w.name === "input_count") : null;
                     if (!countWidget) {
-                        requestAnimationFrame(setupWidgets);
+                        if (setupAttempts++ < 120) requestAnimationFrame(setupWidgets);
                         return;
                     }
 
                     if (!node.isRestored && node.size) {
                         const minSize = node.computeSize();
-                        node.size[0] = minSize[0];
+                        node.size[0] = Math.max(minSize[0], NODE_MIN_WIDTH);
                         node.size[1] = minSize[1];
                     }
                     

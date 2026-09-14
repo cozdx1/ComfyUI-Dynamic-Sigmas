@@ -1,0 +1,118 @@
+{
+  "DynamicSigmaScheduler": {
+    "display_name": "[cozdx1] 동적 시그마 스케줄러",
+    "description": "모델 계열별 기본 계산식과 대화형 곡선 편집으로 시그마 스케줄을 만듭니다. 시작점과 끝점을 포함하여 steps + 1개의 값을 출력합니다.",
+    "inputs": {
+      "model_profile": {
+        "name": "모델 프로필",
+        "tooltip": "스케줄 계산에 사용할 sampling 계열과 기본값을 선택합니다. 모델을 자동 감지하지는 않습니다."
+      },
+      "scheduler": {
+        "name": "스케줄러",
+        "tooltip": "디노이징 스텝을 시그마 구간에 배치하는 방식을 선택합니다."
+      },
+      "steps": {
+        "name": "스텝 수",
+        "tooltip": "디노이징 구간 수입니다. 출력에는 steps + 1개의 값이 포함됩니다."
+      },
+      "shift": {
+        "name": "시프트",
+        "tooltip": "Flow 계열 프로필의 sampling shift입니다. SDXL과 Custom에서는 사용하지 않습니다."
+      },
+      "sigma_start": {
+        "name": "시작 시그마",
+        "tooltip": "스케줄의 첫 번째 시그마 값입니다."
+      },
+      "sigma_end": {
+        "name": "종료 시그마",
+        "tooltip": "스케줄의 마지막 시그마 값입니다."
+      },
+      "curve_factor": {
+        "name": "곡선 계수",
+        "tooltip": "생성되는 곡선을 시작점 또는 끝점 방향으로 휘게 합니다."
+      },
+      "smooth_strength": {
+        "name": "곡선 부드러움",
+        "tooltip": "수동 점 사이의 보간을 선형 0에서 단조 cubic 1까지 조절합니다."
+      },
+      "show_steps": {
+        "name": "스텝 값 표시",
+        "tooltip": "각 시그마 값을 수정 가능한 숫자 위젯으로 표시합니다."
+      },
+      "black_theme": {
+        "name": "어두운 테마",
+        "tooltip": "어두운 그래프 테마를 사용합니다."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "시그마",
+        "tooltip": "float32 텐서 형식의 사용자 지정 시그마 스케줄입니다."
+      }
+    }
+  },
+  "ConcatSigmas": {
+    "display_name": "[cozdx1] 시그마 결합",
+    "description": "여러 시그마 스케줄을 입력 순서대로 연결합니다. 중복 경계를 피하기 위해 마지막 스케줄을 제외한 각 스케줄의 끝값을 제거합니다.",
+    "inputs": {
+      "input_count": {
+        "name": "입력 개수",
+        "tooltip": "표시할 시그마 스케줄 입력의 개수입니다."
+      },
+      "sigma_1": {
+        "name": "시그마 1",
+        "tooltip": "첫 번째 시그마 스케줄입니다."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "시그마",
+        "tooltip": "입력 순서대로 결합된 시그마 스케줄입니다."
+      }
+    }
+  },
+  "GraphSigmas": {
+    "display_name": "[cozdx1] 시그마 그래프",
+    "description": "연결된 각 시그마 스케줄을 그래프 이미지로 렌더링합니다.",
+    "inputs": {
+      "input_count": {
+        "name": "입력 개수",
+        "tooltip": "표시할 시그마 입력과 그래프 이미지 출력의 개수입니다."
+      },
+      "black_theme": {
+        "name": "어두운 테마",
+        "tooltip": "렌더링되는 그래프에 어두운 배경을 사용합니다."
+      },
+      "preview_resolution": {
+        "name": "미리보기 해상도",
+        "tooltip": "렌더링되는 각 그래프 이미지의 픽셀 해상도입니다."
+      },
+      "sigma_1": {
+        "name": "시그마 1",
+        "tooltip": "그래프로 표시할 첫 번째 시그마 스케줄입니다."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "이미지 1",
+        "tooltip": "시그마 1의 그래프 이미지입니다."
+      }
+    }
+  },
+  "Cozdx1SigmasToSchedulerFunc": {
+    "display_name": "[cozdx1] 시그마를 스케줄러 함수로",
+    "description": "SIGMAS 스케줄을 SCHEDULER_FUNC 입력을 지원하는 Detailer 및 샘플러 노드에서 사용할 수 있도록 변환합니다. 받는 노드가 요청한 스텝 수에 맞춰 자동으로 리샘플링합니다.",
+    "inputs": {
+      "sigmas": {
+        "name": "시그마",
+        "tooltip": "스케줄러 함수로 변환할 시그마 스케줄입니다. 다른 스텝 수가 요청되면 곡선과 양 끝점을 유지하며 리샘플링합니다."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "스케줄러 함수",
+        "tooltip": "scheduler_func_opt에 연결합니다. Impact Pack에서는 연결된 함수가 해당 노드의 scheduler 선택값을 대신합니다."
+      }
+    }
+  }
+}
